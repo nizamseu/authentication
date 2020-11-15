@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import firebaseConfig from'./firebaseConfig';
 import './style.css'
+import { useHistory, useLocation } from 'react-router-dom';
 
 //firebase.initializeApp(firebaseConfig)
 if (!firebase.apps.length) {
@@ -17,8 +18,10 @@ const SocialAuth = () => {
     const googleProvider = new firebase.auth.GoogleAuthProvider();
     const fbProvider = new firebase.auth.FacebookAuthProvider();
     const gitProvider = new firebase.auth.GithubAuthProvider();
-   
-   console.log("data",userInfo);
+    const history= useHistory();
+    const location = useLocation();
+    let { from } = location.state || { from: { pathname: "/" } };
+
 
 // Logging With google
    const handleGoogle= ()=>{
@@ -31,11 +34,14 @@ const SocialAuth = () => {
             email:email,
             photo:photoURL
         }
-       setUserInfo(logedIn)
+        
+       setUserInfo(logedIn);
+       history.replace(from);
+      
       }).catch(error=> {
         console.log(error);
       });
-
+      
    }
 
    // Logging With google End
@@ -53,7 +59,8 @@ const SocialAuth = () => {
             email:email,
             photo:photoURL
         }
-       setUserInfo(logedInWithGit)
+       setUserInfo(logedInWithGit);
+       history.replace(from);
       })
       .catch(error => {
         console.log(error);
@@ -73,7 +80,8 @@ const SocialAuth = () => {
             email:email,
             photo:photoURL
         }
-       setUserInfo(logedInWithFb)
+       setUserInfo(logedInWithFb);
+       history.replace(from);
       })
       .catch(error=> {
         console.log(error);
@@ -82,21 +90,21 @@ const SocialAuth = () => {
 // Logging With Facebook end
 
    // Looged Out Area
-   const handleLoggedOut =()=>{
-    firebase.auth().signOut()
-    .then(res=> {
-        const  logedOut={
-            islogged:false,
-            name:'',
-            email:'',
-            photo:''
-        }
-       setUserInfo(logedOut)
+//    const handleLoggedOut = ()=> {
+//     firebase.auth().signOut()
+//     .then(res=> {
+//         const  logedOut={
+//             islogged:false,
+//             name:'',
+//             email:'',
+//             photo:''
+//         }
+//        setUserInfo(logedOut)
 
-      }).catch(error => {
-        console.log(error);
-      });
-   }
+//       }).catch(error => {
+//         console.log(error);
+//       });
+//    }
 
    // Looged Out Area End
 
@@ -104,7 +112,7 @@ const SocialAuth = () => {
 
     return (
         <Grid xs={12}>
-            <AppBar >
+            {/* <AppBar >
                 <Toolbar >
                     <Typography style={{flexGrow:'2'}}>Home</Typography>
                     {userInfo.islogged &&  
@@ -121,7 +129,7 @@ const SocialAuth = () => {
                     
                     
                 </Toolbar>
-            </AppBar>
+            </AppBar> */}
             
        
             <Grid item xs={12} container  direction="column" alignItems="center" justify="center" >
